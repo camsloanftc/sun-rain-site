@@ -1,79 +1,172 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Link, graphql } from 'gatsby'
-import Layout from '../components/Layout'
+import { StaticQuery, graphql } from 'gatsby'
+import styled, { css } from 'react-emotion'
+import Helmet from 'react-helmet'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 
-export default class IndexPage extends React.Component {
-  render() {
-    const { data } = this.props
-    const { edges: posts } = data.allMarkdownRemark
+import ThemeProvider from '../styles/ThemeProvider'
 
-    return (
-      <Layout>
-        <section className="section">
-          <div className="container">
-            <div className="content">
-              <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
-            </div>
-            {posts
-              .map(({ node: post }) => (
-                <div
-                  className="content"
-                  style={{ border: '1px solid #eaecee', padding: '2em 4em' }}
-                  key={post.id}
-                >
-                  <p>
-                    <Link className="has-text-primary" to={post.fields.slug}>
-                      {post.frontmatter.title}
-                    </Link>
-                    <span> &bull; </span>
-                    <small>{post.frontmatter.date}</small>
-                  </p>
-                  <p>
-                    {post.excerpt}
-                    <br />
-                    <br />
-                    <Link className="button is-small" to={post.fields.slug}>
-                      Keep Reading →
-                    </Link>
-                  </p>
-                </div>
-              ))}
-          </div>
-        </section>
-      </Layout>
-    )
-  }
-}
+library.add(fab)
 
-IndexPage.propTypes = {
-  data: PropTypes.shape({
-    allMarkdownRemark: PropTypes.shape({
-      edges: PropTypes.array,
-    }),
-  }),
-}
-
-export const pageQuery = graphql`
-  query IndexQuery {
-    allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] },
-      filter: { frontmatter: { templateKey: { eq: "blog-post" } }}
-    ) {
-      edges {
-        node {
-          excerpt(pruneLength: 400)
-          id
-          fields {
-            slug
-          }
-          frontmatter {
-            title
-            templateKey
-            date(formatString: "MMMM DD, YYYY")
-          }
-        }
-      }
-    }
-  }
+const IconLink = styled('a')`
+	color: ${props => props.color};
 `
+
+const linkContainer = css`
+	display: flex;
+	margin: 10px 0;
+	width: 100%;
+	justify-content: space-between;
+`
+
+const Links = ({ linksArray }) => (
+	<div className={linkContainer}>
+		{linksArray.map((link, index) => (
+			<div key={index}>
+				<IconLink target="_blank" color="black" href={link.url}>
+					<FontAwesomeIcon icon={['fab', link.title]} size="lg" />
+				</IconLink>
+			</div>
+		))}
+	</div>
+)
+
+const Index = ({ homePageData }) => {
+	const {
+		backgroundImageDesktop,
+		youTubeUrl,
+		facebookUrl,
+		backgroundImageMobile,
+		contactEmailAddress,
+		spotifyArtistUrl,
+		soundcloudUrl,
+		appleMusicUrl,
+		bandcampUrl,
+		websiteDescription,
+		websiteTitle,
+		instagramUrl,
+	} = homePageData
+
+	console.log(backgroundImageDesktop.fixed.src)
+
+	return (
+		<ThemeProvider>
+			{({ primaryColor, somethingElse }) => {
+				const desktopStyle = css`
+					font-family: 'Lustria', serif;
+					color: ${primaryColor};
+					background: lightgrey;
+					height: 100vh;
+					width: 100%;
+					display: flex;
+          justify-content: center;
+          background-color:black;
+          background-image: url('${backgroundImageMobile.fixed.src}');
+          background-size: cover;
+					@media (min-width: 700px) {
+						background-image: url('${backgroundImageDesktop.fixed.src}');
+						background-size: cover;
+					}
+				`
+
+				const flexContainer = css`
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					flex-direction: column;
+					min-width: 200px;
+
+					@media (min-width: 700px) {
+						align-items: flex-start;
+						position: absolute;
+						left: 10%;
+						top: 40%;
+					}
+				`
+
+				const primaryFont = css`
+					font-family: 'Lustria', serif;
+				`
+
+				console.log(primaryColor)
+
+				const linksArray = [
+					...(instagramUrl ? [{ title: 'instagram', url: instagramUrl }] : []),
+					...(soundcloudUrl ? [{ title: 'soundcloud', url: soundcloudUrl }] : []),
+					...(spotifyArtistUrl ? [{ title: 'spotify', url: spotifyArtistUrl }] : []),
+					...(appleMusicUrl ? [{ title: 'spotify', url: appleMusicUrl }] : []),
+					...(bandcampUrl ? [{ title: 'bandcamp', url: bandcampUrl }] : []),
+					...(youTubeUrl ? [{ title: 'youtube', url: youTubeUrl }] : []),
+					...(facebookUrl ? [{ title: 'facebook', url: facebookUrl }] : []),
+				]
+
+				return (
+					<>
+						<Helmet
+							title={websiteTitle}
+							meta={[{ name: 'description', content: websiteDescription }]}
+						>
+							<html lang="en" />
+							<link href="https://fonts.googleapis.com/css?family=Lustria" rel="stylesheet" />
+						</Helmet>
+						<div className={desktopStyle}>
+							<div className={flexContainer}>
+								<h1 className={primaryFont}>{websiteTitle}</h1>
+								<p>{websiteDescription}</p>
+								<Links linksArray={linksArray} />
+								{contactEmailAddress && (
+									<IconLink color="black" href={`mailto:${contactEmailAddress}`}>
+										contact
+									</IconLink>
+								)}
+							</div>
+						</div>
+					</>
+				)
+			}}
+		</ThemeProvider>
+	)
+}
+
+const IndexPage = () => (
+	<StaticQuery
+		query={graphql`
+			query IndexQuery {
+				contentfulHomePage(websiteTitle: { ne: "DONOTDELETE" }) {
+					websiteTitle
+					websiteDescription
+					primaryColor
+					appleMusicUrl
+					instagramUrl
+					bandcampUrl
+					facebookUrl
+					youTubeUrl
+					spotifyArtistLink
+					soundcloudUrl
+					contactEmailAddress
+					backgroundImageMobile {
+						fixed(width: 1000) {
+							width
+							height
+							src
+							srcSet
+						}
+					}
+					backgroundImageDesktop {
+						fixed(width: 2000) {
+							width
+							height
+							src
+							srcSet
+						}
+					}
+				}
+			}
+		`}
+		render={data => <Index homePageData={data.contentfulHomePage} />}
+	/>
+)
+
+export default IndexPage
