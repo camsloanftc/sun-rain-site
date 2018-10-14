@@ -43,7 +43,7 @@ const Index = ({ homePageData }) => {
 		facebookUrl,
 		backgroundImageMobile,
 		contactEmailAddress,
-		spotifyArtistUrl,
+		spotifyArtistLink,
 		soundcloudUrl,
 		appleMusicUrl,
 		bandcampUrl,
@@ -100,7 +100,7 @@ const Index = ({ homePageData }) => {
 				const linksArray = [
 					...(instagramUrl ? [{ title: 'instagram', url: instagramUrl }] : []),
 					...(soundcloudUrl ? [{ title: 'soundcloud', url: soundcloudUrl }] : []),
-					...(spotifyArtistUrl ? [{ title: 'spotify', url: spotifyArtistUrl }] : []),
+					...(spotifyArtistLink ? [{ title: 'spotify', url: spotifyArtistLink }] : []),
 					...(appleMusicUrl ? [{ title: 'apple', url: appleMusicUrl }] : []),
 					...(bandcampUrl ? [{ title: 'bandcamp', url: bandcampUrl }] : []),
 					...(youTubeUrl ? [{ title: 'youtube', url: youTubeUrl }] : []),
