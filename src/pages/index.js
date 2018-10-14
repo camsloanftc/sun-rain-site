@@ -9,10 +9,11 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import ThemeProvider from '../styles/ThemeProvider'
 
+import './index.css'
+
 library.add(fab)
 
 const IconLink = styled('a')`
-	margin-right: 20px;
 	color: ${props => props.color};
 `
 
@@ -24,9 +25,9 @@ const linkContainer = css`
 `
 
 const Links = ({ linksArray }) => (
-	<div className={linkContainer}>
+	<div className={`${linkContainer} extra-link-style`}>
 		{linksArray.map((link, index) => (
-			<div key={index}>
+			<div className="link-div" key={index}>
 				<IconLink target="_blank" color="black" href={link.url}>
 					<FontAwesomeIcon icon={['fab', link.title]} size="lg" />
 				</IconLink>
@@ -64,7 +65,8 @@ const Index = ({ homePageData }) => {
           justify-content: center;
           background-color:black;
           background-image: url('${backgroundImageMobile.fixed.src}');
-          background-size: cover;
+		  background-size: cover;
+		  background-position: 50% 50%;
 					@media (min-width: 700px) {
 						background-image: url('${backgroundImageDesktop.fixed.src}');
 						background-size: cover;
@@ -79,18 +81,21 @@ const Index = ({ homePageData }) => {
 					min-width: 200px;
 
 					@media (min-width: 700px) {
-						align-items: flex-start;
+						// align-items: flex-start;
 						position: absolute;
 						left: 10%;
 						top: 40%;
 					}
 				`
 
-				const primaryFont = css`
+				const mainHeading = css`
 					font-family: 'Lustria', serif;
+					margin-bottom: 8px;
 				`
 
-				console.log(primaryColor)
+				const mainParagraph = css`
+					margin-bottom: 8px;
+				`
 
 				const linksArray = [
 					...(instagramUrl ? [{ title: 'instagram', url: instagramUrl }] : []),
@@ -107,12 +112,12 @@ const Index = ({ homePageData }) => {
 						<Layout>
 							<div className={desktopStyle}>
 								<div className={flexContainer}>
-									<h1 className={primaryFont}>{websiteTitle}</h1>
-									<p>{websiteDescription}</p>
+									<h1 className={mainHeading}>{websiteTitle}</h1>
+									<p className={mainParagraph}>{websiteDescription}</p>
 									<Links linksArray={linksArray} />
 									{contactEmailAddress && (
 										<IconLink color="black" href={`mailto:${contactEmailAddress}`}>
-											contact
+											Contact
 										</IconLink>
 									)}
 								</div>
