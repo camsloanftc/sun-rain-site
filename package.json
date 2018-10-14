@@ -28,6 +28,7 @@
 	"scripts": {
 		"build": "gatsby build",
 		"develop": "gatsby develop",
+		"serve": "gatsby serve",
 		"format": "prettier --write '**/*.js'",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"addColorPicker": "cd ./src/contentful-extentions/contentful-ui-colorpicker && CONTENTFUL_MANAGEMENT_ACCESS_TOKEN=<MGMT Token here> yarn contentful-extension create --space-id <Space ID Here>"

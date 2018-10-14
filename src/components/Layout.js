@@ -10,22 +10,19 @@ const Layout = ({ children }) => (
 	<StaticQuery
 		query={graphql`
 			query SiteTitleQuery {
-				site {
-					siteMetadata {
-						title
-					}
+				contentfulHomePage(websiteTitle: { ne: "DONOTDELETE" }) {
+					websiteTitle
+					websiteDescription
 				}
 			}
 		`}
 		render={data => (
 			<>
 				<Helmet
-					title={data.site.siteMetadata.title}
-					meta={[
-						{ name: 'description', content: 'Sample' },
-						{ name: 'keywords', content: 'sample, something' },
-					]}
+					title={data.contentfulHomePage.websiteTitle}
+					meta={[{ name: 'description', content: data.contentfulHomePage.websiteDescription }]}
 				>
+					<link href="https://fonts.googleapis.com/css?family=Lustria" rel="stylesheet" />
 					<html lang="en" />
 				</Helmet>
 				<div>{children}</div>

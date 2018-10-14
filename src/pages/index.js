@@ -2,6 +2,7 @@ import React from 'react'
 import { StaticQuery, graphql } from 'gatsby'
 import styled, { css } from 'react-emotion'
 import Helmet from 'react-helmet'
+import Layout from '../components/layout'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fab } from '@fortawesome/free-brands-svg-icons'
@@ -11,13 +12,14 @@ import ThemeProvider from '../styles/ThemeProvider'
 library.add(fab)
 
 const IconLink = styled('a')`
+	margin-right: 20px;
 	color: ${props => props.color};
 `
 
 const linkContainer = css`
 	display: flex;
 	margin: 10px 0;
-	width: 100%;
+	// width: 100%;
 	justify-content: space-between;
 `
 
@@ -48,8 +50,6 @@ const Index = ({ homePageData }) => {
 		websiteTitle,
 		instagramUrl,
 	} = homePageData
-
-	console.log(backgroundImageDesktop.fixed.src)
 
 	return (
 		<ThemeProvider>
@@ -96,7 +96,7 @@ const Index = ({ homePageData }) => {
 					...(instagramUrl ? [{ title: 'instagram', url: instagramUrl }] : []),
 					...(soundcloudUrl ? [{ title: 'soundcloud', url: soundcloudUrl }] : []),
 					...(spotifyArtistUrl ? [{ title: 'spotify', url: spotifyArtistUrl }] : []),
-					...(appleMusicUrl ? [{ title: 'spotify', url: appleMusicUrl }] : []),
+					...(appleMusicUrl ? [{ title: 'apple', url: appleMusicUrl }] : []),
 					...(bandcampUrl ? [{ title: 'bandcamp', url: bandcampUrl }] : []),
 					...(youTubeUrl ? [{ title: 'youtube', url: youTubeUrl }] : []),
 					...(facebookUrl ? [{ title: 'facebook', url: facebookUrl }] : []),
@@ -104,25 +104,20 @@ const Index = ({ homePageData }) => {
 
 				return (
 					<>
-						<Helmet
-							title={websiteTitle}
-							meta={[{ name: 'description', content: websiteDescription }]}
-						>
-							<html lang="en" />
-							<link href="https://fonts.googleapis.com/css?family=Lustria" rel="stylesheet" />
-						</Helmet>
-						<div className={desktopStyle}>
-							<div className={flexContainer}>
-								<h1 className={primaryFont}>{websiteTitle}</h1>
-								<p>{websiteDescription}</p>
-								<Links linksArray={linksArray} />
-								{contactEmailAddress && (
-									<IconLink color="black" href={`mailto:${contactEmailAddress}`}>
-										contact
-									</IconLink>
-								)}
+						<Layout>
+							<div className={desktopStyle}>
+								<div className={flexContainer}>
+									<h1 className={primaryFont}>{websiteTitle}</h1>
+									<p>{websiteDescription}</p>
+									<Links linksArray={linksArray} />
+									{contactEmailAddress && (
+										<IconLink color="black" href={`mailto:${contactEmailAddress}`}>
+											contact
+										</IconLink>
+									)}
+								</div>
 							</div>
-						</div>
+						</Layout>
 					</>
 				)
 			}}
